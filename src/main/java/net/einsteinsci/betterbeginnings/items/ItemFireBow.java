@@ -18,7 +18,7 @@ public class ItemFireBow extends Item
 		setTextureName(ModMain.MODID + ":" + getUnlocalizedName().substring(5));
 
 		setMaxStackSize(1);
-		setMaxDamage(8);
+		setMaxDamage(1);
 
 		setCreativeTab(ModMain.tabBetterBeginnings);
 	}
@@ -69,7 +69,7 @@ public class ItemFireBow extends Item
                 world.setBlock(x, y, z, Blocks.fire);
             }
 
-            stack.damageItem(1, player);
+            stack.damageItem(2, player);
             return true;
         }
     }

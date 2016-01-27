@@ -27,8 +27,11 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = ModMain.MODID, version = ModMain.VERSION, name = ModMain.NAME,
-     guiFactory = "net.einsteinsci.betterbeginnings.config.BBConfigGuiFactory")
+//@Mod(modid = ModMain.MODID, version = ModMain.VERSION, name = ModMain.NAME,
+//     guiFactory = "net.einsteinsci.betterbeginnings.config.BBConfigGuiFactory")
+
+@Mod(modid = ModMain.MODID, version = ModMain.VERSION, name = ModMain.NAME)
+
 public class ModMain
 {
 	public static final String MODID = "betterbeginnings";

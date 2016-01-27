@@ -8,17 +8,13 @@ import net.einsteinsci.betterbeginnings.network.PacketCampfireState;
 import net.einsteinsci.betterbeginnings.register.recipe.CampfireConfiggableRecipes;
 import net.einsteinsci.betterbeginnings.register.recipe.CampfirePanRecipes;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
@@ -26,7 +22,9 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -350,62 +348,106 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 		if (fuel == null)
 		{
 			return 0;
-		}
+//		}
 
-		Block block = Block.getBlockFromItem(fuel.getItem());
+	} else {
 		Item item = fuel.getItem();
+		int item2 = fuel.getItemDamage();
 
-		if (block != null)
-		{
-			if (block.getMaterial() == Material.wood)
-			{
-				return 600;
-			}
-			if (block == Blocks.wooden_slab)
-			{
-				return 300;
-			}
-			if (block == Blocks.sapling)
-			{
-				return 200;
-			}
+		// THIS WORKS FOR COAL BUT ALSO INCLUDES CHARCOAL - DO NOT WANT THAT
+		// if(item == Items.coal) return 3200;
+
+		// IS THERE A BETTER WAY TO GET IT TO USE JUST COAL AND NOT CHARCOAL
+		// THAN THIS?
+
+		int id = OreDictionary.getOreID(fuel);
+		String name = OreDictionary.getOreName(id);
+		if (name.equals("stickWood")) {
+			return 62;
 		}
 
-		if (item != null)
-		{
+		// EXAMPLES OF OTHER FUEL CONFIGS FOR MY REFERENCE ONLY
+		if (item instanceof ItemBlock
+				&& Block.getBlockFromItem(item) != Blocks.air) {
+			Block block = Block.getBlockFromItem(item);
 
+			id = OreDictionary.getOreID(fuel);
+			name = OreDictionary.getOreName(id);
+			if (name.equals("treeWood") || name.equals("logWood")) {
+				return 1000;
+			}
+			id = OreDictionary.getOreID(fuel);
+			name = OreDictionary.getOreName(id);
+			if (name.equals("plankWood")) {
+				return 250;
+			}
 
-			if (item instanceof ItemTool)
-			{
-				if (((ItemTool)item).getToolMaterialName().equals("WOOD") ||
-						((ItemTool)item).getToolMaterialName().equals("noobwood"))
-				{
-					return 400;
-				}
-			}
-			if (item instanceof ItemSword)
-			{
-				if (((ItemSword)item).getToolMaterialName().equals("WOOD") ||
-						((ItemSword)item).getToolMaterialName().equals("noobwood"))
-				{
-					return 400;
-				}
-			}
-			if (item instanceof ItemHoe)
-			{
-				if (((ItemHoe)item).getToolMaterialName().equals("WOOD") ||
-						((ItemHoe)item).getToolMaterialName().equals("noobwood"))
-				{
-					return 400;
-				}
-			}
-			if (item == Items.stick)
-			{
-				return 200;
-			}
+			// if(block.getMaterial() == Material.rock){
+			// return 300;
+			// }
 		}
 
-		return 0;
+		// if(item instanceof ItemTool && ((ItemTool)
+		// item).getToolMaterialName().equals("EMERALD")) return 300;
+
+		return GameRegistry.getFuelValue(fuel);
+	}
+		
+		
+//		Block block = Block.getBlockFromItem(fuel.getItem());
+//		Item item = fuel.getItem();
+//
+//		if (block != null)
+//		{
+//			if (block.getMaterial() == Material.wood)
+//			{
+//				return 600;
+//			}
+//			if (block == Blocks.wooden_slab)
+//			{
+//				return 300;
+//			}
+//			if (block == Blocks.sapling)
+//			{
+//				return 200;
+//			}
+//		}
+//
+//		if (item != null)
+//		{
+//
+//
+//			if (item instanceof ItemTool)
+//			{
+//				if (((ItemTool)item).getToolMaterialName().equals("WOOD") ||
+//						((ItemTool)item).getToolMaterialName().equals("noobwood"))
+//				{
+//					return 400;
+//				}
+//			}
+//			if (item instanceof ItemSword)
+//			{
+//				if (((ItemSword)item).getToolMaterialName().equals("WOOD") ||
+//						((ItemSword)item).getToolMaterialName().equals("noobwood"))
+//				{
+//					return 400;
+//				}
+//			}
+//			if (item instanceof ItemHoe)
+//			{
+//				if (((ItemHoe)item).getToolMaterialName().equals("WOOD") ||
+//						((ItemHoe)item).getToolMaterialName().equals("noobwood"))
+//				{
+//					return 400;
+//				}
+//			}
+//			if (item == Items.stick)
+//			{
+//				return 200;
+//			}
+//		}
+//
+//		return 0;
 	}
 
 	public ItemStack stackFuel()

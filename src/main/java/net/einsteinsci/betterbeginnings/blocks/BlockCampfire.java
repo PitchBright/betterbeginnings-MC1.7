@@ -127,7 +127,8 @@ public class BlockCampfire extends BlockContainer
 	@Override
 	public Item getItemDropped(int par1, Random rand, int par3)
 	{
-		return Item.getItemFromBlock(RegisterBlocks.campfire);
+//		return Item.getItemFromBlock(RegisterBlocks.campfire);
+		return null;
 	}
 
 	public boolean canPlaceBlockAt(World world, int x, int y, int z)
