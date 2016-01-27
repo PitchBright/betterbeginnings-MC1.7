@@ -84,7 +84,8 @@ public class ModMain
 	@EventHandler
 	public void init(FMLInitializationEvent e)
 	{
-		RegisterRecipes.addFurnaceRecipes();
+//		RegisterRecipes.addCampfireConfiggableRecipes();
+		CampfireConfiggableRecipes.init();
 
 	}
 

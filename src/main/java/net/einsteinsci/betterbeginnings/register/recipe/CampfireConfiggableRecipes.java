@@ -36,67 +36,6 @@ public class CampfireConfiggableRecipes {
 	}
 
 	public static void init() {
-		// SOME TEMPORARY RECIPES
-		// this.func_151393_a(Blocks.iron_ore, new ItemStack(Items.iron_ingot),
-		// 0.7F);
-		// this.func_151393_a(Blocks.gold_ore, new ItemStack(Items.gold_ingot),
-		// 1.0F);
-		// this.func_151393_a(Blocks.sand, new ItemStack(Blocks.glass), 0.35F);
-		// this.func_151393_a(Blocks.cobblestone, new ItemStack(Blocks.stone),
-		// 0.35F);
-		// this.func_151396_a(Items.clay_ball, new ItemStack(Items.brick),
-		// 0.3F);
-		// this.func_151393_a(Blocks.log, new ItemStack(Items.coal, 1), 0.355F);
-		// this.func_151393_a(Blocks.coal_ore, new ItemStack(Items.coal),
-		// 0.35F);
-
-		// func_151396_a(new ItemStack(MItems.itemCobblePile, 1, 8), new
-		// ItemStack(MItems.itemQuicklime), 0.35F);
-		// func_151396_a(new ItemStack(getItemCrossMOD("modid:unlocname"), 1,
-		// 8), new ItemStack(MItems.itemQuicklime), 0.35F);
-		// func_151396_a(new ItemStack(getItemCrossMOD("Aquaculture:item.loot"),
-		// 1, 3), new ItemStack(getItemCrossMOD("Aquaculture:item.loot"), 1, 4),
-		// 0.35F);
-		// func_151396_a(new ItemStack(getItemCrossMOD("Aquaculture:item.loot"),
-		// 1, 2), new ItemStack(getItemCrossMOD("Aquaculture:item.loot"), 1, 5),
-		// 0.35F);
-		// func_151396_a(new ItemStack(getItemCrossMOD("Aquaculture:item.loot"),
-		// 1, 7), new ItemStack(getItemCrossMOD("Aquaculture:item.loot"), 1, 8),
-		// 0.35F);
-		// func_151396_a(new ItemStack(Items.potionitem, 1, 0), new
-		// ItemStack(getItemCrossMOD("thirstmod:fresh_water"), 1, 0), 0.35F);
-		// func_151396_a(new ItemStack(Items.water_bucket, 1, 0), new
-		// ItemStack(getItemCrossMOD("thirstmod:clean_bucket")), 0.35F);
-		// func_151396_a(new ItemStack(getItemCrossMOD("MoCreatures:ratraw"), 1,
-		// 0), new ItemStack(getItemCrossMOD("MoCreatures:ratcooked"), 1, 0),
-		// 0.35F);
-		// func_151396_a(new ItemStack(getItemCrossMOD("MoCreatures:crabraw"),
-		// 1, 0), new ItemStack(getItemCrossMOD("MoCreatures:crabcooked"), 1,
-		// 0), 0.35F);
-		// func_151396_a(new
-		// ItemStack(getItemCrossMOD("MoCreatures:ostrichraw"), 1, 0), new
-		// ItemStack(getItemCrossMOD("MoCreatures:ostrichcooked"), 1, 0),
-		// 0.35F);
-		// func_151396_a(new ItemStack(getItemCrossMOD("MoCreatures:turkeyraw"),
-		// 1, 0), new ItemStack(getItemCrossMOD("MoCreatures:turkeycooked"), 1,
-		// 0), 0.35F);
-		// func_151396_a(new ItemStack(getItemCrossMOD("MoCreatures:mocegg"), 1,
-		// 0), new ItemStack(getItemCrossMOD("MoCreatures:omelet"), 1, 0),
-		// 0.35F);
-		// func_151396_a(new ItemStack(Items.chicken, 1, 0), new
-		// ItemStack(Items.cooked_chicken, 1, 0), 0.35F);
-		// func_151396_a(new ItemStack(Items.porkchop, 1, 0), new
-		// ItemStack(Items.cooked_porkchop, 1, 0), 0.35F);
-		// func_151396_a(new ItemStack(Items.potato, 1, 0), new
-		// ItemStack(Items.baked_potato, 1, 0), 0.35F);
-		// func_151396_a(new ItemStack(Items.fish, 1, 0), new
-		// ItemStack(Items.cooked_fished, 1, 0), 0.35F);
-		// func_151396_a(new ItemStack(Items.fish, 1, 1), new
-		// ItemStack(Items.cooked_fished, 1, 1), 0.35F);
-		// func_151396_a(new ItemStack(Items.beef, 1, 0), new
-		// ItemStack(Items.cooked_beef, 1, 0), 0.35F);
-		// func_151396_a(new ItemStack(Item.getItemFromBlock(Blocks.cactus), 1,
-		// 0), new ItemStack(Items.dye, 1, 2), 0.35F);
 
 	}
 
