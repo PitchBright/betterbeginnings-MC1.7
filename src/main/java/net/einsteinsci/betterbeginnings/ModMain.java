@@ -1,5 +1,6 @@
 package net.einsteinsci.betterbeginnings;
 
+import net.einsteinsci.betterbeginnings.config.Config;
 import net.einsteinsci.betterbeginnings.event.BBEventHandler;
 import net.einsteinsci.betterbeginnings.network.PacketCampfireState;
 import net.einsteinsci.betterbeginnings.network.ServerProxy;
@@ -7,6 +8,7 @@ import net.einsteinsci.betterbeginnings.register.RegisterBlocks;
 import net.einsteinsci.betterbeginnings.register.RegisterItems;
 import net.einsteinsci.betterbeginnings.register.RegisterRecipes;
 import net.einsteinsci.betterbeginnings.register.RegisterTileEntities;
+import net.einsteinsci.betterbeginnings.register.recipe.CampfireConfiggableRecipes;
 import net.einsteinsci.betterbeginnings.util.LogUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -56,8 +58,9 @@ public class ModMain
 	{
 		LogUtil.log("Starting pre-initialization...");
 
-		configFile = new Configuration(e.getSuggestedConfigurationFile());
-		configFile.load();
+		Config.init(e.getSuggestedConfigurationFile());
+//		configFile = new Configuration(e.getSuggestedConfigurationFile());
+//		configFile.load();
 //		BBConfig.initialize();
 //		BBConfig.syncConfig(configFile);
 
@@ -88,6 +91,10 @@ public class ModMain
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e)
 	{
+
+		Config.syncConfig();
+
+		CampfireConfiggableRecipes.init();
 //		BBConfig.fillAlwaysBreakable();
 //		BBConfig.fillAlsoPickaxes();
 //		BBConfig.fillAlsoAxes();
