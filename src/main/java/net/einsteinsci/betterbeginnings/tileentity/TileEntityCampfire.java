@@ -36,8 +36,8 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 	public static final int maxDecayTime = 400; // 20 sec
 
 	public static final int SLOT_INPUT = 0;
-	public static final int SLOT_FUEL = 2;
 	public static final int SLOT_OUTPUT = 1;
+	public static final int SLOT_FUEL = 2;
 	public static final int SLOT_PAN = 3;
 
 	public ItemStack[] stacks = new ItemStack[4];
@@ -251,6 +251,7 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 		}
 
 		ItemStack potentialResult = CampfirePanRecipes.smelting().getSmeltingResult(stackInput());
+		
 		if (potentialResult == null || stackPan() == null)
 		{
 			potentialResult = CampfireRecipes.smelting().getSmeltingResult(stackInput());
