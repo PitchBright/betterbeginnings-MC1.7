@@ -1,21 +1,23 @@
 package net.einsteinsci.betterbeginnings.inventory;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.einsteinsci.betterbeginnings.items.ItemPan;
 import net.einsteinsci.betterbeginnings.register.recipe.CampfireRecipes;
 import net.einsteinsci.betterbeginnings.tileentity.TileEntityCampfire;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerCampfire extends Container
 {
 	private static final int SLOT_INPUT = TileEntityCampfire.SLOT_INPUT;
 	private static final int SLOT_OUTPUT = TileEntityCampfire.SLOT_OUTPUT;
 	private static final int SLOT_FUEL = TileEntityCampfire.SLOT_FUEL;
-	private static final int SLOT_PAN = TileEntityCampfire.SLOT_PAN;
+//	private static final int SLOT_PAN = TileEntityCampfire.SLOT_PAN;
 	public int lastItemBurnTime;
 	public int lastCookTime;
 	private TileEntityCampfire tileCampfire;
@@ -29,7 +31,7 @@ public class ContainerCampfire extends Container
 		addSlotToContainer(new Slot(tileCampfire, SLOT_INPUT, 58, 12));
 		addSlotToContainer(new SlotFurnace(inventory.player, campfire, SLOT_OUTPUT, 118, 34));
 		addSlotToContainer(new Slot(tileCampfire, SLOT_FUEL, 58, 57));
-		addSlotToContainer(new Slot(tileCampfire, SLOT_PAN, 32, 35));
+//		addSlotToContainer(new Slot(tileCampfire, SLOT_PAN, 32, 35));
 
 		int i;
 		for (i = 0; i < 3; ++i)
@@ -101,52 +103,52 @@ public class ContainerCampfire extends Container
 
 			if (slotId == SLOT_OUTPUT)
 			{
-				if (!mergeItemStack(itemstack, SLOT_PAN + 1, 39, true))
-				{
-					return null;
-				}
+//				if (!mergeItemStack(itemstack, SLOT_PAN + 1, 39, true))
+//				{
+//					return null;
+//				}
 				slot.onSlotChange(itemstack, itemstackCopy);
 			}
-			else if (slotId != SLOT_INPUT && slotId != SLOT_FUEL && slotId != SLOT_PAN)
-			{
-				if (itemstack.getItem() instanceof ItemPan)
-				{
-					if (!mergeItemStack(itemstack, SLOT_PAN, SLOT_PAN + 1, false))
-					{
-						return null;
-					}
-				}
-				else if (TileEntityCampfire.isItemFuel(itemstack))
-				{
-					if (!mergeItemStack(itemstack, SLOT_FUEL, SLOT_FUEL + 1, false))
-					{
-						return null;
-					}
-				}
-				else if (CampfireRecipes.smelting().getSmeltingResult(itemstack) != null)
-				{
-					if (!mergeItemStack(itemstack, SLOT_INPUT, SLOT_INPUT + 1, false))
-					{
-						return null;
-					}
-				}
-				else if (slotId > SLOT_OUTPUT && slotId < 30)
-				{
-					if (!mergeItemStack(itemstack, 30, 39, false))
-					{
-						return null;
-					}
-				}
-				else if (slotId >= 30 && slotId < 39 &&
-					!mergeItemStack(itemstack, SLOT_PAN + 1, 30, false))
-				{
-					return null;
-				}
-			}
-			else if (!mergeItemStack(itemstack, SLOT_PAN + 1, 39, false))
-			{
-				return null;
-			}
+//			else if (slotId != SLOT_INPUT && slotId != SLOT_FUEL && slotId != SLOT_PAN)
+//			{
+//				if (itemstack.getItem() instanceof ItemPan)
+//				{
+//					if (!mergeItemStack(itemstack, SLOT_PAN, SLOT_PAN + 1, false))
+//					{
+//						return null;
+//					}
+//				}
+//				else if (TileEntityCampfire.isItemFuel(itemstack))
+//				{
+//					if (!mergeItemStack(itemstack, SLOT_FUEL, SLOT_FUEL + 1, false))
+//					{
+//						return null;
+//					}
+//				}
+//				else if (CampfireRecipes.smelting().getSmeltingResult(itemstack) != null)
+//				{
+//					if (!mergeItemStack(itemstack, SLOT_INPUT, SLOT_INPUT + 1, false))
+//					{
+//						return null;
+//					}
+//				}
+//				else if (slotId > SLOT_OUTPUT && slotId < 30)
+//				{
+//					if (!mergeItemStack(itemstack, 30, 39, false))
+//					{
+//						return null;
+//					}
+//				}
+//				else if (slotId >= 30 && slotId < 39 &&
+//					!mergeItemStack(itemstack, SLOT_PAN + 1, 30, false))
+//				{
+//					return null;
+//				}
+//			}
+//			else if (!mergeItemStack(itemstack, SLOT_PAN + 1, 39, false))
+//			{
+//				return null;
+//			}
 
 			if (itemstack.stackSize == 0)
 			{

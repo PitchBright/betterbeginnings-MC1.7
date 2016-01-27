@@ -52,10 +52,10 @@ public class BBEventHandler
 		}
 
 
-		if (item == RegisterItems.pan)
-		{
-			e.toolTip.add(ChatUtil.BLUE + "Fry stuff over a campfire!");
-		}
+//		if (item == RegisterItems.pan)
+//		{
+//			e.toolTip.add(ChatUtil.BLUE + "Fry stuff over a campfire!");
+//		}
 
 		if (item == RegisterItems.fireBow)
 		{
