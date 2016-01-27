@@ -13,34 +13,11 @@ public class NEIConfig implements IConfigureNEI
 	@Override
 	public void loadConfig()
 	{
-		NEIKilnRecipeHandler kilnRecipeHandler = new NEIKilnRecipeHandler();
-		API.registerRecipeHandler(kilnRecipeHandler);
-		API.registerUsageHandler(kilnRecipeHandler);
-
-		NEISmelterRecipeHandler smelterRecipeHandler = new NEISmelterRecipeHandler();
-		API.registerRecipeHandler(smelterRecipeHandler);
-		API.registerUsageHandler(smelterRecipeHandler);
-
-		NEIBrickOvenRecipeHandler brickOvenRecipeHandler = new NEIBrickOvenRecipeHandler();
-		API.registerRecipeHandler(brickOvenRecipeHandler);
-		API.registerUsageHandler(brickOvenRecipeHandler);
-
-		NEIAdvancedCraftingHandler advancedCraftingHandler = new NEIAdvancedCraftingHandler();
-		API.registerRecipeHandler(advancedCraftingHandler);
-		API.registerUsageHandler(advancedCraftingHandler);
-
+	
 		NEICampfireRecipeHandler campfireRecipeHandler = new NEICampfireRecipeHandler();
 		API.registerRecipeHandler(campfireRecipeHandler);
 		API.registerUsageHandler(campfireRecipeHandler);
 
-		API.hideItem(new ItemStack(RegisterBlocks.kilnLit));
-		API.hideItem(new ItemStack(RegisterBlocks.brickOvenLit));
-		API.hideItem(new ItemStack(RegisterBlocks.smelterLit));
-		API.hideItem(new ItemStack(RegisterBlocks.obsidianKilnLit));
-		API.hideItem(new ItemStack(RegisterBlocks.netherBrickOvenLit));
-		API.hideItem(new ItemStack(RegisterBlocks.enderSmelterLit));
-
-		API.hideItem(new ItemStack(RegisterBlocks.campfireLit));
 	}
 
 	@Override

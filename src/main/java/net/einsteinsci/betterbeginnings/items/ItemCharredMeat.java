@@ -1,7 +1,6 @@
 package net.einsteinsci.betterbeginnings.items;
 
 import net.einsteinsci.betterbeginnings.ModMain;
-import net.einsteinsci.betterbeginnings.register.achievement.RegisterAchievements;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -22,8 +21,6 @@ public class ItemCharredMeat extends ItemFood
 	public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player)
 	{
 		ItemStack result = super.onEaten(stack, world, player);
-
-		RegisterAchievements.achievementGet(player, "charredMeat");
 
 		return result;
 	}

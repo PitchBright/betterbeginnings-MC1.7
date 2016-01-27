@@ -1,28 +1,25 @@
 package net.einsteinsci.betterbeginnings.tileentity;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
 import net.einsteinsci.betterbeginnings.ModMain;
 import net.einsteinsci.betterbeginnings.blocks.BlockCampfire;
-import net.einsteinsci.betterbeginnings.items.ItemBonePickaxe;
-import net.einsteinsci.betterbeginnings.items.ItemFlintHatchet;
-import net.einsteinsci.betterbeginnings.items.ItemKnifeFlint;
 import net.einsteinsci.betterbeginnings.items.ItemPan;
 import net.einsteinsci.betterbeginnings.network.PacketCampfireState;
-import net.einsteinsci.betterbeginnings.network.PacketNetherBrickOvenFuelLevel;
-import net.einsteinsci.betterbeginnings.register.RegisterItems;
 import net.einsteinsci.betterbeginnings.register.recipe.CampfirePanRecipes;
 import net.einsteinsci.betterbeginnings.register.recipe.CampfireRecipes;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
@@ -30,8 +27,9 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-
-import java.util.List;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityCampfire extends TileEntity implements IInventory
 {
@@ -375,11 +373,7 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 
 		if (item != null)
 		{
-			if (item instanceof ItemBonePickaxe || item instanceof ItemFlintHatchet ||
-				item instanceof ItemKnifeFlint)
-			{
-				return 0;
-			}
+
 
 			if (item instanceof ItemTool)
 			{
