@@ -38,7 +38,7 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 	public static final int SLOT_INPUT = 0;
 	public static final int SLOT_FUEL = 2;
 	public static final int SLOT_OUTPUT = 1;
-//	public static final int SLOT_PAN = 3;
+	public static final int SLOT_PAN = 3;
 
 	public ItemStack[] stacks = new ItemStack[4];
 
@@ -251,10 +251,10 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 		}
 
 		ItemStack potentialResult = CampfirePanRecipes.smelting().getSmeltingResult(stackInput());
-//		if (potentialResult == null || stackPan() == null)
-//		{
-//			potentialResult = CampfireRecipes.smelting().getSmeltingResult(stackInput());
-//		}
+		if (potentialResult == null || stackPan() == null)
+		{
+			potentialResult = CampfireRecipes.smelting().getSmeltingResult(stackInput());
+		}
 
 		if (potentialResult == null)
 		{
@@ -286,10 +286,10 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 		if (canCook())
 		{
 			ItemStack potentialResult = CampfirePanRecipes.smelting().getSmeltingResult(stackInput());
-//			if (potentialResult == null || stackPan() == null)
-//			{
-//				potentialResult = CampfireRecipes.smelting().getSmeltingResult(stackInput());
-//			}
+			if (potentialResult == null || stackPan() == null)
+			{
+				potentialResult = CampfireRecipes.smelting().getSmeltingResult(stackInput());
+			}
 
 			if (stackOutput() == null)
 			{
@@ -307,8 +307,8 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 				stacks[SLOT_INPUT] = null;
 			}
 
-//			if (stacks[SLOT_PAN] != null)
-//			{
+			if (stacks[SLOT_PAN] != null)
+			{
 //				if (stacks[SLOT_PAN].getItem() instanceof ItemPan)
 //				{
 //					int damage = stacks[SLOT_PAN].getItemDamage();
@@ -319,7 +319,7 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 //						stacks[SLOT_PAN] = null;
 //					}
 //				}
-//			}
+			}
 		}
 	}
 
@@ -328,10 +328,10 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 		return stacks[SLOT_INPUT];
 	}
 
-//	public ItemStack stackPan()
-//	{
-//		return stacks[SLOT_PAN];
-//	}
+	public ItemStack stackPan()
+	{
+		return stacks[SLOT_PAN];
+	}
 
 	public ItemStack stackOutput()
 	{
@@ -506,28 +506,23 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 	public void closeInventory()
 	{ }
 
-//	@Override
-//	public boolean isItemValidForSlot(int slot, ItemStack stack)
-//	{
-//		return slot == SLOT_INPUT || slot == SLOT_PAN && isPan(stack) ||
-//			slot == SLOT_FUEL && isItemFuel(stack);
-//	}
-	
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack)
 	{
-		return slot == SLOT_INPUT || slot == SLOT_FUEL && isItemFuel(stack);
+		return slot == SLOT_INPUT || slot == SLOT_PAN && isPan(stack) ||
+			slot == SLOT_FUEL && isItemFuel(stack);
 	}
 
-//	private static boolean isPan(ItemStack stack)
-//	{
-//		if (stack == null)
-//		{
-//			return false;
-//		}
-//
+	private static boolean isPan(ItemStack stack)
+	{
+		if (stack == null)
+		{
+			return false;
+		}
+		return false;
+
 //		return stack.getItem() instanceof ItemPan;
-//	}
+	}
 
 	public static boolean isItemFuel(ItemStack itemstack1)
 	{
