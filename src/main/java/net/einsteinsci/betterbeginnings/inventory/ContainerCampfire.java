@@ -145,10 +145,10 @@ public class ContainerCampfire extends Container
 					return null;
 				}
 			}
-//			else if (!mergeItemStack(itemstack, SLOT_PAN + 1, 39, false))
-//			{
-//				return null;
-//			}
+			else if (!mergeItemStack(itemstack, SLOT_PAN + 1, 39, false))
+			{
+				return null;
+			}
 
 			if (itemstack.stackSize == 0)
 			{

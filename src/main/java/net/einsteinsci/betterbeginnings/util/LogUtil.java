@@ -1,27 +1,14 @@
 package net.einsteinsci.betterbeginnings.util;
 
-import cpw.mods.fml.common.FMLLog;
 import net.einsteinsci.betterbeginnings.ModMain;
-import net.einsteinsci.betterbeginnings.config.BBConfig;
+
 import org.apache.logging.log4j.Level;
+
+import cpw.mods.fml.common.FMLLog;
 
 public class LogUtil
 {
-	public static void logDebug(String text)
-	{
-		if (BBConfig.debugLogging)
-		{
-			log(Level.DEBUG, text);
-		}
-	}
 
-	public static void logDebug(Level level, String text)
-	{
-		if (BBConfig.debugLogging)
-		{
-			log(level, text);
-		}
-	}
 
 	public static void log(Level level, String text)
 	{

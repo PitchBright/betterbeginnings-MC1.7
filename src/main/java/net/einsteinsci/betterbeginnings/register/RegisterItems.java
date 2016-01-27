@@ -8,9 +8,6 @@ import net.minecraftforge.common.util.EnumHelper;
 
 public class RegisterItems
 {
-	public static final ToolMaterial noobWood = EnumHelper.addToolMaterial("noobwood", 0, 60, 2.0f, -4, 35);
-
-
 	public static final Item charredMeat = new ItemCharredMeat();
 	public static final Item fireBow = new ItemFireBow();
 

@@ -1,6 +1,5 @@
 package net.einsteinsci.betterbeginnings;
 
-import net.einsteinsci.betterbeginnings.config.BBConfig;
 import net.einsteinsci.betterbeginnings.event.BBEventHandler;
 import net.einsteinsci.betterbeginnings.network.PacketCampfireState;
 import net.einsteinsci.betterbeginnings.network.ServerProxy;
@@ -8,11 +7,9 @@ import net.einsteinsci.betterbeginnings.register.RegisterBlocks;
 import net.einsteinsci.betterbeginnings.register.RegisterItems;
 import net.einsteinsci.betterbeginnings.register.RegisterRecipes;
 import net.einsteinsci.betterbeginnings.register.RegisterTileEntities;
-import net.einsteinsci.betterbeginnings.register.RemoveRecipes;
 import net.einsteinsci.betterbeginnings.util.LogUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -61,8 +58,8 @@ public class ModMain
 
 		configFile = new Configuration(e.getSuggestedConfigurationFile());
 		configFile.load();
-		BBConfig.initialize();
-		BBConfig.syncConfig(configFile);
+//		BBConfig.initialize();
+//		BBConfig.syncConfig(configFile);
 
 		proxy.registerNetworkStuff();
 		proxy.registerRenderThings();
@@ -84,22 +81,16 @@ public class ModMain
 	@EventHandler
 	public void init(FMLInitializationEvent e)
 	{
-		RemoveRecipes.remove();
-		RegisterRecipes.addShapedRecipes();
 		RegisterRecipes.addFurnaceRecipes();
 
-		if (BBConfig.moduleFurnaces)
-		{
-			RemoveRecipes.removeFurnaceRecipes();
-		}
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e)
 	{
-		BBConfig.fillAlwaysBreakable();
-		BBConfig.fillAlsoPickaxes();
-		BBConfig.fillAlsoAxes();
+//		BBConfig.fillAlwaysBreakable();
+//		BBConfig.fillAlsoPickaxes();
+//		BBConfig.fillAlsoAxes();
 
 
 		LogUtil.log("Finished post-initialization.");
