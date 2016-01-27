@@ -5,8 +5,8 @@ import java.util.List;
 import net.einsteinsci.betterbeginnings.ModMain;
 import net.einsteinsci.betterbeginnings.blocks.BlockCampfire;
 import net.einsteinsci.betterbeginnings.network.PacketCampfireState;
+import net.einsteinsci.betterbeginnings.register.recipe.CampfireConfiggableRecipes;
 import net.einsteinsci.betterbeginnings.register.recipe.CampfirePanRecipes;
-import net.einsteinsci.betterbeginnings.register.recipe.CampfireRecipes;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -254,7 +254,7 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 		
 		if (potentialResult == null || stackPan() == null)
 		{
-			potentialResult = CampfireRecipes.smelting().getSmeltingResult(stackInput());
+			potentialResult = CampfireConfiggableRecipes.smelting().getSmeltingResult(stackInput());
 		}
 
 		if (potentialResult == null)
@@ -289,7 +289,7 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 			ItemStack potentialResult = CampfirePanRecipes.smelting().getSmeltingResult(stackInput());
 			if (potentialResult == null || stackPan() == null)
 			{
-				potentialResult = CampfireRecipes.smelting().getSmeltingResult(stackInput());
+				potentialResult = CampfireConfiggableRecipes.smelting().getSmeltingResult(stackInput());
 			}
 
 			if (stackOutput() == null)

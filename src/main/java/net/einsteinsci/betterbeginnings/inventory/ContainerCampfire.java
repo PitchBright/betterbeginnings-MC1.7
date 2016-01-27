@@ -1,6 +1,6 @@
 package net.einsteinsci.betterbeginnings.inventory;
 
-import net.einsteinsci.betterbeginnings.register.recipe.CampfireRecipes;
+import net.einsteinsci.betterbeginnings.register.recipe.CampfireConfiggableRecipes;
 import net.einsteinsci.betterbeginnings.tileentity.TileEntityCampfire;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -125,7 +125,7 @@ public class ContainerCampfire extends Container
 						return null;
 					}
 				}
-				else if (CampfireRecipes.smelting().getSmeltingResult(itemstack) != null)
+				else if (CampfireConfiggableRecipes.smelting().getSmeltingResult(itemstack) != null)
 				{
 					if (!mergeItemStack(itemstack, SLOT_INPUT, SLOT_INPUT + 1, false))
 					{

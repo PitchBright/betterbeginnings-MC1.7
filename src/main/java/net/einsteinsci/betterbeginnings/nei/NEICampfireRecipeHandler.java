@@ -1,13 +1,14 @@
 package net.einsteinsci.betterbeginnings.nei;
 
-import codechicken.nei.ItemList;
-import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.TemplateRecipeHandler;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import net.einsteinsci.betterbeginnings.ModMain;
 import net.einsteinsci.betterbeginnings.gui.GuiCampfire;
-import net.einsteinsci.betterbeginnings.register.RegisterItems;
-import net.einsteinsci.betterbeginnings.register.recipe.CampfirePanRecipes;
-import net.einsteinsci.betterbeginnings.register.recipe.CampfireRecipes;
 import net.einsteinsci.betterbeginnings.tileentity.TileEntityCampfire;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
@@ -17,9 +18,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import scala.actors.threadpool.Arrays;
-
-import java.util.*;
+import codechicken.nei.ItemList;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class NEICampfireRecipeHandler extends TemplateRecipeHandler
 {
@@ -109,20 +110,20 @@ public class NEICampfireRecipeHandler extends TemplateRecipeHandler
 	@Override
 	public void loadCraftingRecipes(ItemStack result)
 	{
-		for (Object obj : CampfireRecipes.getSmeltingList().entrySet())
-		{
-			Map.Entry entry = (Map.Entry)obj;
-
-			ItemStack inp = (ItemStack)entry.getKey();
-			ItemStack outp = (ItemStack)entry.getValue();
-
-			if (outp.getItem() == result.getItem() &&
-				(result.getItemDamage() == OreDictionary.WILDCARD_VALUE ||
-					outp.getItemDamage() == result.getItemDamage()))
-			{
-				arecipes.add(new CampfireCachedRecipe(inp, outp, false));
-			}
-		}
+//		for (Object obj : CampfireRecipes.getSmeltingList().entrySet())
+//		{
+//			Map.Entry entry = (Map.Entry)obj;
+//
+//			ItemStack inp = (ItemStack)entry.getKey();
+//			ItemStack outp = (ItemStack)entry.getValue();
+//
+//			if (outp.getItem() == result.getItem() &&
+//				(result.getItemDamage() == OreDictionary.WILDCARD_VALUE ||
+//					outp.getItemDamage() == result.getItemDamage()))
+//			{
+//				arecipes.add(new CampfireCachedRecipe(inp, outp, false));
+//			}
+//		}
 
 //		for (Object obj : CampfirePanRecipes.getSmeltingList().entrySet())
 //		{
@@ -143,20 +144,20 @@ public class NEICampfireRecipeHandler extends TemplateRecipeHandler
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient)
 	{
-		for (Object obj : CampfireRecipes.getSmeltingList().entrySet())
-		{
-			Map.Entry entry = (Map.Entry)obj;
-
-			ItemStack inp = (ItemStack)entry.getKey();
-			ItemStack outp = (ItemStack)entry.getValue();
-
-			if (inp.getItem() == ingredient.getItem() &&
-				(inp.getItemDamage() == OreDictionary.WILDCARD_VALUE ||
-					inp.getItemDamage() == ingredient.getItemDamage()))
-			{
-				arecipes.add(new CampfireCachedRecipe(inp, outp, false));
-			}
-		}
+//		for (Object obj : CampfireRecipes.getSmeltingList().entrySet())
+//		{
+//			Map.Entry entry = (Map.Entry)obj;
+//
+//			ItemStack inp = (ItemStack)entry.getKey();
+//			ItemStack outp = (ItemStack)entry.getValue();
+//
+//			if (inp.getItem() == ingredient.getItem() &&
+//				(inp.getItemDamage() == OreDictionary.WILDCARD_VALUE ||
+//					inp.getItemDamage() == ingredient.getItemDamage()))
+//			{
+//				arecipes.add(new CampfireCachedRecipe(inp, outp, false));
+//			}
+//		}
 
 //		for (Object obj : CampfirePanRecipes.getSmeltingList().entrySet())
 //		{
