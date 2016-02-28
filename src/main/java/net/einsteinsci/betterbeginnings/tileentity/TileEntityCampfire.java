@@ -362,8 +362,13 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 
 		int id = OreDictionary.getOreID(fuel);
 		String name = OreDictionary.getOreName(id);
-		if (name.equals("stickWood")) {
+		if (name.equals("stickWood") || name.equals("barkWood")) {
 			return 62;
+		}
+		id = OreDictionary.getOreID(fuel);
+		name = OreDictionary.getOreName(id);
+		if (name.equals("boardWood")) {
+			return 250;
 		}
 
 		// EXAMPLES OF OTHER FUEL CONFIGS FOR MY REFERENCE ONLY
@@ -373,13 +378,8 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 
 			id = OreDictionary.getOreID(fuel);
 			name = OreDictionary.getOreName(id);
-			if (name.equals("treeWood") || name.equals("logWood")) {
+			if (name.equals("treeWood") || name.equals("logWood") || name.equals("plankWood") || name.equals("listAlldebarkedlogs")) {
 				return 1000;
-			}
-			id = OreDictionary.getOreID(fuel);
-			name = OreDictionary.getOreName(id);
-			if (name.equals("plankWood")) {
-				return 250;
 			}
 
 			// if(block.getMaterial() == Material.rock){
