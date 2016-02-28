@@ -1,35 +1,41 @@
 package net.einsteinsci.betterbeginnings;
 
-import cpw.mods.fml.common.*;
+import net.einsteinsci.betterbeginnings.config.Config;
+import net.einsteinsci.betterbeginnings.event.BBEventHandler;
+import net.einsteinsci.betterbeginnings.network.PacketCampfireState;
+import net.einsteinsci.betterbeginnings.network.ServerProxy;
+import net.einsteinsci.betterbeginnings.register.RegisterBlocks;
+import net.einsteinsci.betterbeginnings.register.RegisterItems;
+import net.einsteinsci.betterbeginnings.register.RegisterRecipes;
+import net.einsteinsci.betterbeginnings.register.RegisterTileEntities;
+import net.einsteinsci.betterbeginnings.register.recipe.CampfireConfiggableRecipes;
+import net.einsteinsci.betterbeginnings.util.LogUtil;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.einsteinsci.betterbeginnings.config.BBConfig;
-import net.einsteinsci.betterbeginnings.event.BBEventHandler;
-import net.einsteinsci.betterbeginnings.event.Worldgen;
-import net.einsteinsci.betterbeginnings.network.PacketCampfireState;
-import net.einsteinsci.betterbeginnings.network.PacketNetherBrickOvenFuelLevel;
-import net.einsteinsci.betterbeginnings.network.ServerProxy;
-import net.einsteinsci.betterbeginnings.register.*;
-import net.einsteinsci.betterbeginnings.register.achievement.RegisterAchievements;
-import net.einsteinsci.betterbeginnings.util.LogUtil;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraftforge.common.AchievementPage;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import org.apache.logging.log4j.Level;
 
-@Mod(modid = ModMain.MODID, version = ModMain.VERSION, name = ModMain.NAME,
-     guiFactory = "net.einsteinsci.betterbeginnings.config.BBConfigGuiFactory")
+//@Mod(modid = ModMain.MODID, version = ModMain.VERSION, name = ModMain.NAME,
+//     guiFactory = "net.einsteinsci.betterbeginnings.config.BBConfigGuiFactory")
+
+@Mod(modid = ModMain.MODID, version = ModMain.VERSION, name = ModMain.NAME)
+
 public class ModMain
 {
 	public static final String MODID = "betterbeginnings";
-	public static final String VERSION = "0.9.5-R6";
+	public static final String VERSION = "0.9.5-Khufu";
 	public static final String NAME = "Better Beginnings";
 	public static final CreativeTabs tabBetterBeginnings = new CreativeTabs("tabBetterBeginnings")
 	{
@@ -37,7 +43,7 @@ public class ModMain
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
-			return RegisterItems.flintKnife;
+			return RegisterItems.fireBow;
 		}
 	};
 
@@ -55,10 +61,11 @@ public class ModMain
 	{
 		LogUtil.log("Starting pre-initialization...");
 
-		configFile = new Configuration(e.getSuggestedConfigurationFile());
-		configFile.load();
-		BBConfig.initialize();
-		BBConfig.syncConfig(configFile);
+		Config.init(e.getSuggestedConfigurationFile());
+//		configFile = new Configuration(e.getSuggestedConfigurationFile());
+//		configFile.load();
+//		BBConfig.initialize();
+//		BBConfig.syncConfig(configFile);
 
 		proxy.registerNetworkStuff();
 		proxy.registerRenderThings();
@@ -68,8 +75,7 @@ public class ModMain
 		MinecraftForge.EVENT_BUS.register(eventHandler);
 
 		network = NetworkRegistry.INSTANCE.newSimpleChannel("bbchannel");
-		network.registerMessage(PacketNetherBrickOvenFuelLevel.PacketHandler.class,
-		    PacketNetherBrickOvenFuelLevel.class, 0, Side.CLIENT);
+
 		network.registerMessage(PacketCampfireState.PacketHandler.class,
 			PacketCampfireState.class, 1, Side.CLIENT);
 
@@ -81,28 +87,23 @@ public class ModMain
 	@EventHandler
 	public void init(FMLInitializationEvent e)
 	{
-		RemoveRecipes.remove();
-		RegisterRecipes.addShapelessRecipes();
-		RegisterRecipes.addShapedRecipes();
-		RegisterRecipes.addAdvancedRecipes();
-		RegisterRecipes.addFurnaceRecipes();
+//		RegisterRecipes.addCampfireConfiggableRecipes();
+		CampfireConfiggableRecipes.init();
 
-		if (BBConfig.moduleFurnaces)
-		{
-			RemoveRecipes.removeFurnaceRecipes();
-		}
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e)
 	{
-		BBConfig.fillAlwaysBreakable();
-		BBConfig.fillAlsoPickaxes();
-		BBConfig.fillAlsoAxes();
 
-		RegisterItems.tweakVanilla();
-		Worldgen.addWorldgen();
-		AchievementPage.registerAchievementPage(new AchievementPage(NAME, RegisterAchievements.getAchievements()));
+		Config.syncConfig();
+
+		CampfireConfiggableRecipes.init();
+//		BBConfig.fillAlwaysBreakable();
+//		BBConfig.fillAlsoPickaxes();
+//		BBConfig.fillAlsoAxes();
+
+
 		LogUtil.log("Finished post-initialization.");
 	}
 }

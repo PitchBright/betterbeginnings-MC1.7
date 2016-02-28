@@ -12,6 +12,7 @@
 *.idea/*
 *.db
 *.pdn
-
+.metadata/
 *.classpath
 *.project
+*.prefs

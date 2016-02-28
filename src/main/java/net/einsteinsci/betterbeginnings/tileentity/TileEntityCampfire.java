@@ -1,28 +1,20 @@
 package net.einsteinsci.betterbeginnings.tileentity;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
 import net.einsteinsci.betterbeginnings.ModMain;
 import net.einsteinsci.betterbeginnings.blocks.BlockCampfire;
-import net.einsteinsci.betterbeginnings.items.ItemBonePickaxe;
-import net.einsteinsci.betterbeginnings.items.ItemFlintHatchet;
-import net.einsteinsci.betterbeginnings.items.ItemKnifeFlint;
-import net.einsteinsci.betterbeginnings.items.ItemPan;
 import net.einsteinsci.betterbeginnings.network.PacketCampfireState;
-import net.einsteinsci.betterbeginnings.network.PacketNetherBrickOvenFuelLevel;
-import net.einsteinsci.betterbeginnings.register.RegisterItems;
+import net.einsteinsci.betterbeginnings.register.recipe.CampfireConfiggableRecipes;
 import net.einsteinsci.betterbeginnings.register.recipe.CampfirePanRecipes;
-import net.einsteinsci.betterbeginnings.register.recipe.CampfireRecipes;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
@@ -30,8 +22,11 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-
-import java.util.List;
+import net.minecraftforge.oredict.OreDictionary;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityCampfire extends TileEntity implements IInventory
 {
@@ -39,8 +34,8 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 	public static final int maxDecayTime = 400; // 20 sec
 
 	public static final int SLOT_INPUT = 0;
-	public static final int SLOT_FUEL = 2;
 	public static final int SLOT_OUTPUT = 1;
+	public static final int SLOT_FUEL = 2;
 	public static final int SLOT_PAN = 3;
 
 	public ItemStack[] stacks = new ItemStack[4];
@@ -254,9 +249,10 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 		}
 
 		ItemStack potentialResult = CampfirePanRecipes.smelting().getSmeltingResult(stackInput());
+		
 		if (potentialResult == null || stackPan() == null)
 		{
-			potentialResult = CampfireRecipes.smelting().getSmeltingResult(stackInput());
+			potentialResult = CampfireConfiggableRecipes.smelting().getSmeltingResult(stackInput());
 		}
 
 		if (potentialResult == null)
@@ -291,7 +287,7 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 			ItemStack potentialResult = CampfirePanRecipes.smelting().getSmeltingResult(stackInput());
 			if (potentialResult == null || stackPan() == null)
 			{
-				potentialResult = CampfireRecipes.smelting().getSmeltingResult(stackInput());
+				potentialResult = CampfireConfiggableRecipes.smelting().getSmeltingResult(stackInput());
 			}
 
 			if (stackOutput() == null)
@@ -312,16 +308,16 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 
 			if (stacks[SLOT_PAN] != null)
 			{
-				if (stacks[SLOT_PAN].getItem() instanceof ItemPan)
-				{
-					int damage = stacks[SLOT_PAN].getItemDamage();
-					stacks[SLOT_PAN].setItemDamage(damage + 1);
-
-					if (stacks[SLOT_PAN].getItemDamage() >= stacks[SLOT_PAN].getMaxDamage())
-					{
-						stacks[SLOT_PAN] = null;
-					}
-				}
+//				if (stacks[SLOT_PAN].getItem() instanceof ItemPan)
+//				{
+//					int damage = stacks[SLOT_PAN].getItemDamage();
+//					stacks[SLOT_PAN].setItemDamage(damage + 1);
+//
+//					if (stacks[SLOT_PAN].getItemDamage() >= stacks[SLOT_PAN].getMaxDamage())
+//					{
+//						stacks[SLOT_PAN] = null;
+//					}
+//				}
 			}
 		}
 	}
@@ -352,66 +348,106 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 		if (fuel == null)
 		{
 			return 0;
-		}
+//		}
 
-		Block block = Block.getBlockFromItem(fuel.getItem());
+	} else {
 		Item item = fuel.getItem();
+		int item2 = fuel.getItemDamage();
 
-		if (block != null)
-		{
-			if (block.getMaterial() == Material.wood)
-			{
-				return 600;
-			}
-			if (block == Blocks.wooden_slab)
-			{
-				return 300;
-			}
-			if (block == Blocks.sapling)
-			{
-				return 200;
-			}
+		// THIS WORKS FOR COAL BUT ALSO INCLUDES CHARCOAL - DO NOT WANT THAT
+		// if(item == Items.coal) return 3200;
+
+		// IS THERE A BETTER WAY TO GET IT TO USE JUST COAL AND NOT CHARCOAL
+		// THAN THIS?
+
+		int id = OreDictionary.getOreID(fuel);
+		String name = OreDictionary.getOreName(id);
+		if (name.equals("stickWood") || name.equals("barkWood")) {
+			return 62;
+		}
+		id = OreDictionary.getOreID(fuel);
+		name = OreDictionary.getOreName(id);
+		if (name.equals("boardWood")) {
+			return 250;
 		}
 
-		if (item != null)
-		{
-			if (item instanceof ItemBonePickaxe || item instanceof ItemFlintHatchet ||
-				item instanceof ItemKnifeFlint)
-			{
-				return 0;
+		// EXAMPLES OF OTHER FUEL CONFIGS FOR MY REFERENCE ONLY
+		if (item instanceof ItemBlock
+				&& Block.getBlockFromItem(item) != Blocks.air) {
+			Block block = Block.getBlockFromItem(item);
+
+			id = OreDictionary.getOreID(fuel);
+			name = OreDictionary.getOreName(id);
+			if (name.equals("treeWood") || name.equals("logWood") || name.equals("plankWood") || name.equals("listAlldebarkedlogs")) {
+				return 1000;
 			}
 
-			if (item instanceof ItemTool)
-			{
-				if (((ItemTool)item).getToolMaterialName().equals("WOOD") ||
-						((ItemTool)item).getToolMaterialName().equals("noobwood"))
-				{
-					return 400;
-				}
-			}
-			if (item instanceof ItemSword)
-			{
-				if (((ItemSword)item).getToolMaterialName().equals("WOOD") ||
-						((ItemSword)item).getToolMaterialName().equals("noobwood"))
-				{
-					return 400;
-				}
-			}
-			if (item instanceof ItemHoe)
-			{
-				if (((ItemHoe)item).getToolMaterialName().equals("WOOD") ||
-						((ItemHoe)item).getToolMaterialName().equals("noobwood"))
-				{
-					return 400;
-				}
-			}
-			if (item == Items.stick)
-			{
-				return 200;
-			}
+			// if(block.getMaterial() == Material.rock){
+			// return 300;
+			// }
 		}
 
-		return 0;
+		// if(item instanceof ItemTool && ((ItemTool)
+		// item).getToolMaterialName().equals("EMERALD")) return 300;
+
+		return GameRegistry.getFuelValue(fuel);
+	}
+		
+		
+//		Block block = Block.getBlockFromItem(fuel.getItem());
+//		Item item = fuel.getItem();
+//
+//		if (block != null)
+//		{
+//			if (block.getMaterial() == Material.wood)
+//			{
+//				return 600;
+//			}
+//			if (block == Blocks.wooden_slab)
+//			{
+//				return 300;
+//			}
+//			if (block == Blocks.sapling)
+//			{
+//				return 200;
+//			}
+//		}
+//
+//		if (item != null)
+//		{
+//
+//
+//			if (item instanceof ItemTool)
+//			{
+//				if (((ItemTool)item).getToolMaterialName().equals("WOOD") ||
+//						((ItemTool)item).getToolMaterialName().equals("noobwood"))
+//				{
+//					return 400;
+//				}
+//			}
+//			if (item instanceof ItemSword)
+//			{
+//				if (((ItemSword)item).getToolMaterialName().equals("WOOD") ||
+//						((ItemSword)item).getToolMaterialName().equals("noobwood"))
+//				{
+//					return 400;
+//				}
+//			}
+//			if (item instanceof ItemHoe)
+//			{
+//				if (((ItemHoe)item).getToolMaterialName().equals("WOOD") ||
+//						((ItemHoe)item).getToolMaterialName().equals("noobwood"))
+//				{
+//					return 400;
+//				}
+//			}
+//			if (item == Items.stick)
+//			{
+//				return 200;
+//			}
+//		}
+//
+//		return 0;
 	}
 
 	public ItemStack stackFuel()
@@ -526,8 +562,9 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 		{
 			return false;
 		}
+		return false;
 
-		return stack.getItem() instanceof ItemPan;
+//		return stack.getItem() instanceof ItemPan;
 	}
 
 	public static boolean isItemFuel(ItemStack itemstack1)

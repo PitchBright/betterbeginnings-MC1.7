@@ -1,14 +1,16 @@
 package net.einsteinsci.betterbeginnings.inventory;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.einsteinsci.betterbeginnings.items.ItemPan;
-import net.einsteinsci.betterbeginnings.register.recipe.CampfireRecipes;
+import net.einsteinsci.betterbeginnings.register.recipe.CampfireConfiggableRecipes;
 import net.einsteinsci.betterbeginnings.tileentity.TileEntityCampfire;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerCampfire extends Container
 {
@@ -109,21 +111,21 @@ public class ContainerCampfire extends Container
 			}
 			else if (slotId != SLOT_INPUT && slotId != SLOT_FUEL && slotId != SLOT_PAN)
 			{
-				if (itemstack.getItem() instanceof ItemPan)
-				{
-					if (!mergeItemStack(itemstack, SLOT_PAN, SLOT_PAN + 1, false))
-					{
-						return null;
-					}
-				}
-				else if (TileEntityCampfire.isItemFuel(itemstack))
+//				if (itemstack.getItem() instanceof ItemPan)
+//				{
+//					if (!mergeItemStack(itemstack, SLOT_PAN, SLOT_PAN + 1, false))
+//					{
+//						return null;
+//					}
+//				}
+				 if (TileEntityCampfire.isItemFuel(itemstack))
 				{
 					if (!mergeItemStack(itemstack, SLOT_FUEL, SLOT_FUEL + 1, false))
 					{
 						return null;
 					}
 				}
-				else if (CampfireRecipes.smelting().getSmeltingResult(itemstack) != null)
+				else if (CampfireConfiggableRecipes.smelting().getSmeltingResult(itemstack) != null)
 				{
 					if (!mergeItemStack(itemstack, SLOT_INPUT, SLOT_INPUT + 1, false))
 					{
