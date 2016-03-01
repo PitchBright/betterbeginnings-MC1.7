@@ -28,8 +28,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityCampfire extends TileEntity implements IInventory
-{
+public class TileEntityCampfire extends TileEntity implements IInventory {
 	public static final int maxCookTime = 300;
 	public static final int maxDecayTime = 400; // 20 sec
 
@@ -53,27 +52,23 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 
 	private String campfireName;
 
-	public TileEntityCampfire()
-	{
+	public TileEntityCampfire() {
 		super();
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tagCompound)
-	{
+	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 
 		// ItemStacks
 		NBTTagList tagList = tagCompound.getTagList("Items", 10);
 		stacks = new ItemStack[getSizeInventory()];
 
-		for (int i = 0; i < tagList.tagCount(); ++i)
-		{
+		for (int i = 0; i < tagList.tagCount(); ++i) {
 			NBTTagCompound itemTag = tagList.getCompoundTagAt(i);
 			byte slot = itemTag.getByte("Slot");
 
-			if (slot >= 0 && slot < stacks.length)
-			{
+			if (slot >= 0 && slot < stacks.length) {
 				stacks[slot] = ItemStack.loadItemStackFromNBT(itemTag);
 			}
 		}
@@ -85,90 +80,73 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 		decayTime = tagCompound.getShort("DecayTime");
 		campfireState = tagCompound.getByte("CampfireState");
 
-		if (tagCompound.hasKey("CustomName", 8))
-		{
+		if (tagCompound.hasKey("CustomName", 8)) {
 			campfireName = tagCompound.getString("CustomName");
 		}
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tagCompound)
-	{
+	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 
-		tagCompound.setShort("BurnTime", (short)burnTime);
-		tagCompound.setShort("CookTime", (short)cookTime);
-		tagCompound.setShort("DecayTIme", (short)decayTime);
+		tagCompound.setShort("BurnTime", (short) burnTime);
+		tagCompound.setShort("CookTime", (short) cookTime);
+		tagCompound.setShort("DecayTIme", (short) decayTime);
 		tagCompound.setByte("CampfireState", campfireState);
 
 		NBTTagList tagList = new NBTTagList();
 
-		for (int i = 0; i < stacks.length; ++i)
-		{
-			if (stacks[i] != null)
-			{
+		for (int i = 0; i < stacks.length; ++i) {
+			if (stacks[i] != null) {
 				NBTTagCompound itemTag = new NBTTagCompound();
 				stacks[i].writeToNBT(itemTag);
-				itemTag.setByte("Slot", (byte)i);
+				itemTag.setByte("Slot", (byte) i);
 				tagList.appendTag(itemTag);
 			}
 		}
 
 		tagCompound.setTag("Items", tagList);
-		if (hasCustomInventoryName())
-		{
+		if (hasCustomInventoryName()) {
 			tagCompound.setString("CustomName", campfireName);
 		}
 	}
 
 	@Override
-	public void updateEntity()
-	{
-		if (!worldObj.isRemote)
-		{
+	public void updateEntity() {
+		if (!worldObj.isRemote) {
 			boolean burning = burnTime > 0;
 			boolean dirty = false;
 
-			if (burning)
-			{
+			if (burning) {
 				burnTime--;
 				decayTime = maxDecayTime;
 				campfireState = STATE_BURNING;
-			}
-			else
-			{
+			} else {
 				decayTime = Math.max(0, decayTime - 1);
 
-				if (decayTime > 0)
-				{
+				if (decayTime > 0) {
 					campfireState = STATE_DECAYING;
-				}
-				else
-				{
+				} else {
 					campfireState = STATE_OFF;
 				}
 			}
 
-			//only start fuel if lit (w/ F&S or Fire Bow)
-			if (burnTime == 0 && canCook() && campfireState != STATE_OFF)
-			{
+			// only start fuel if lit (w/ F&S or Fire Bow)
+			if (burnTime == 0 && campfireState != STATE_OFF) {
 				burnTime = getBurnTimeForFuel(stackFuel());
 				currentItemBurnTime = burnTime;
-				if (burnTime > 0)
-				{
+				if (burnTime > 0) {
 					decayTime = maxDecayTime;
 					burning = true;
 				}
 
-				if (burning)
-				{
-					if (stackFuel() != null)
-					{
+				if (burning) {
+					if (stackFuel() != null) {
 						stackFuel().stackSize--;
 
-						if (stackFuel().stackSize == 0)
-						{
-							stacks[SLOT_FUEL] = stackFuel().getItem().getContainerItem(stackFuel());
+						if (stackFuel().stackSize == 0) {
+							stacks[SLOT_FUEL] = stackFuel().getItem()
+									.getContainerItem(stackFuel());
 						}
 					}
 				}
@@ -176,50 +154,44 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 				dirty = true;
 			}
 
-			if (campfireState != STATE_OFF && canCook())
-			{
+			if (campfireState != STATE_OFF && canCook()) {
 				cookTime++;
-				if (cookTime == maxCookTime)
-				{
+				if (cookTime == maxCookTime) {
 					cookTime = 0;
-					cookItem();     // Tadaaa!
+					cookItem(); // Tadaaa!
 					dirty = true;
 				}
-			}
-			else
-			{
+			} else {
 				cookTime = 0;
 				dirty = true;
 			}
 
-			if (burning != decayTime > 0)
-			{
+			if (burning != decayTime > 0) {
 				dirty = true;
 			}
 
-			BlockCampfire.updateBlockState(campfireState == STATE_BURNING, worldObj,
-				xCoord, yCoord, zCoord);
+			BlockCampfire.updateBlockState(campfireState == STATE_BURNING,
+					worldObj, xCoord, yCoord, zCoord);
 
-			if (dirty)
-			{
+			if (dirty) {
 				markDirty();
 			}
 
-			NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(worldObj.provider.dimensionId,
-				xCoord, yCoord, zCoord, 128.0d);
-			ModMain.network.sendToAllAround(new PacketCampfireState(xCoord, yCoord, zCoord, campfireState),
-				point);
+			NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(
+					worldObj.provider.dimensionId, xCoord, yCoord, zCoord,
+					128.0d);
+			ModMain.network.sendToAllAround(new PacketCampfireState(xCoord,
+					yCoord, zCoord, campfireState), point);
 
-			if (campfireState == STATE_BURNING)
-			{
+			if (campfireState == STATE_BURNING) {
 				// Light idiots on fire
-				List idiots = worldObj.getEntitiesWithinAABB(EntityLivingBase.class,
-					AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1));
-				for (Object obj : idiots)
-				{
-					if (obj instanceof EntityLivingBase)
-					{
-						EntityLivingBase idiot = (EntityLivingBase)obj;
+				List idiots = worldObj.getEntitiesWithinAABB(
+						EntityLivingBase.class, AxisAlignedBB.getBoundingBox(
+								xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1,
+								zCoord + 1));
+				for (Object obj : idiots) {
+					if (obj instanceof EntityLivingBase) {
+						EntityLivingBase idiot = (EntityLivingBase) obj;
 						idiot.setFire(5);
 					}
 				}
@@ -228,44 +200,39 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 	}
 
 	@Override
-	public Packet getDescriptionPacket()
-	{
+	public Packet getDescriptionPacket() {
 		NBTTagCompound tag = new NBTTagCompound();
 		writeToNBT(tag);
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, tag);
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager manager, S35PacketUpdateTileEntity packet)
-	{
+	public void onDataPacket(NetworkManager manager,
+			S35PacketUpdateTileEntity packet) {
 		readFromNBT(packet.func_148857_g());
 	}
 
-	public boolean canCook()
-	{
-		if (stackInput() == null)
-		{
+	public boolean canCook() {
+		if (stackInput() == null) {
 			return false;
 		}
 
-		ItemStack potentialResult = CampfirePanRecipes.smelting().getSmeltingResult(stackInput());
-		
-		if (potentialResult == null || stackPan() == null)
-		{
-			potentialResult = CampfireConfiggableRecipes.smelting().getSmeltingResult(stackInput());
+		ItemStack potentialResult = CampfirePanRecipes.smelting()
+				.getSmeltingResult(stackInput());
+
+		if (potentialResult == null || stackPan() == null) {
+			potentialResult = CampfireConfiggableRecipes.smelting()
+					.getSmeltingResult(stackInput());
 		}
 
-		if (potentialResult == null)
-		{
+		if (potentialResult == null) {
 			return false; // instant no if there's no recipe
 		}
 
-		if (stackOutput() == null)
-		{
+		if (stackOutput() == null) {
 			return true; // instant yes if output is open
 		}
-		if (!stackOutput().isItemEqual(potentialResult))
-		{
+		if (!stackOutput().isItemEqual(potentialResult)) {
 			return false; // instant no if output doesn't match recipe
 		}
 
@@ -275,227 +242,178 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 		return canFit && canFitWithItem;
 	}
 
-	public boolean isDecaying()
-	{
+	public boolean isKindling() {
+
+		int id = OreDictionary.getOreID(stackInput());
+		String name = OreDictionary.getOreName(id);
+
+		if (stackInput() == null) {
+			return false;
+		}
+
+		if (name.equals("stickWood") || name.equals("barkWood")) {
+			return true; // instant yes if output is open
+		}
+		//
+		// ItemStack potentialResult = CampfirePanRecipes.smelting()
+		// .getSmeltingResult(stackInput());
+		//
+		// if (potentialResult == null || stackPan() == null) {
+		// potentialResult = CampfireConfiggableRecipes.smelting()
+		// .getSmeltingResult(stackInput());
+		// }
+		//
+		// if (potentialResult == null) {
+		// return false; // instant no if there's no recipe
+		// }
+		//
+		// if (stackOutput() == null) {
+		// return true; // instant yes if output is open
+		// }
+		// if (!stackOutput().isItemEqual(potentialResult)) {
+		// return false; // instant no if output doesn't match recipe
+		// }
+		//
+		// int resultSize = stackOutput().stackSize + potentialResult.stackSize;
+		// boolean canFit = resultSize <= getInventoryStackLimit();
+		// boolean canFitWithItem = resultSize <=
+		// stackOutput().getMaxStackSize();
+		// return canFit && canFitWithItem;
+		return false;
+	}
+
+	public boolean isDecaying() {
 		return decayTime > 0;
 	}
 
-	private void cookItem()
-	{
-		if (canCook())
-		{
-			ItemStack potentialResult = CampfirePanRecipes.smelting().getSmeltingResult(stackInput());
-			if (potentialResult == null || stackPan() == null)
-			{
-				potentialResult = CampfireConfiggableRecipes.smelting().getSmeltingResult(stackInput());
+	private void cookItem() {
+		if (canCook()) {
+			ItemStack potentialResult = CampfirePanRecipes.smelting()
+					.getSmeltingResult(stackInput());
+			if (potentialResult == null || stackPan() == null) {
+				potentialResult = CampfireConfiggableRecipes.smelting()
+						.getSmeltingResult(stackInput());
 			}
 
-			if (stackOutput() == null)
-			{
+			if (stackOutput() == null) {
 				stacks[SLOT_OUTPUT] = potentialResult.copy();
-			}
-			else if (stackOutput().isItemEqual(potentialResult))
-			{
+			} else if (stackOutput().isItemEqual(potentialResult)) {
 				stackOutput().stackSize += potentialResult.stackSize;
 			}
 
 			stackInput().stackSize--;
 
-			if (stackInput().stackSize <= 0)
-			{
+			if (stackInput().stackSize <= 0) {
 				stacks[SLOT_INPUT] = null;
 			}
 
-			if (stacks[SLOT_PAN] != null)
-			{
-//				if (stacks[SLOT_PAN].getItem() instanceof ItemPan)
-//				{
-//					int damage = stacks[SLOT_PAN].getItemDamage();
-//					stacks[SLOT_PAN].setItemDamage(damage + 1);
-//
-//					if (stacks[SLOT_PAN].getItemDamage() >= stacks[SLOT_PAN].getMaxDamage())
-//					{
-//						stacks[SLOT_PAN] = null;
-//					}
-//				}
+			if (stacks[SLOT_PAN] != null) {
+				// if (stacks[SLOT_PAN].getItem() instanceof ItemPan)
+				// {
+				// int damage = stacks[SLOT_PAN].getItemDamage();
+				// stacks[SLOT_PAN].setItemDamage(damage + 1);
+				//
+				// if (stacks[SLOT_PAN].getItemDamage() >=
+				// stacks[SLOT_PAN].getMaxDamage())
+				// {
+				// stacks[SLOT_PAN] = null;
+				// }
+				// }
 			}
 		}
 	}
 
-	public ItemStack stackInput()
-	{
+	public ItemStack stackInput() {
 		return stacks[SLOT_INPUT];
 	}
 
-	public ItemStack stackPan()
-	{
+	public ItemStack stackPan() {
 		return stacks[SLOT_PAN];
 	}
 
-	public ItemStack stackOutput()
-	{
+	public ItemStack stackOutput() {
 		return stacks[SLOT_OUTPUT];
 	}
 
 	@Override
-	public int getSizeInventory()
-	{
+	public int getSizeInventory() {
 		return stacks.length;
 	}
 
-	public static int getBurnTimeForFuel(ItemStack fuel)
-	{
-		if (fuel == null)
-		{
+	public static int getBurnTimeForFuel(ItemStack fuel) {
+		if (fuel == null) {
 			return 0;
-//		}
+			// }
 
-	} else {
-		Item item = fuel.getItem();
-		int item2 = fuel.getItemDamage();
+		} else {
+			Item item = fuel.getItem();
+			int item2 = fuel.getItemDamage();
 
-		// THIS WORKS FOR COAL BUT ALSO INCLUDES CHARCOAL - DO NOT WANT THAT
-		// if(item == Items.coal) return 3200;
-
-		// IS THERE A BETTER WAY TO GET IT TO USE JUST COAL AND NOT CHARCOAL
-		// THAN THIS?
-
-		int id = OreDictionary.getOreID(fuel);
-		String name = OreDictionary.getOreName(id);
-		if (name.equals("stickWood") || name.equals("barkWood")) {
-			return 62;
-		}
-		id = OreDictionary.getOreID(fuel);
-		name = OreDictionary.getOreName(id);
-		if (name.equals("boardWood")) {
-			return 250;
-		}
-
-		// EXAMPLES OF OTHER FUEL CONFIGS FOR MY REFERENCE ONLY
-		if (item instanceof ItemBlock
-				&& Block.getBlockFromItem(item) != Blocks.air) {
-			Block block = Block.getBlockFromItem(item);
+			int id = OreDictionary.getOreID(fuel);
+			String name = OreDictionary.getOreName(id);
+			if (name.equals("stickWood") || name.equals("barkWood")) {
+				return 37;
+			}
 
 			id = OreDictionary.getOreID(fuel);
 			name = OreDictionary.getOreName(id);
-			if (name.equals("treeWood") || name.equals("logWood") || name.equals("plankWood") || name.equals("listAlldebarkedlogs")) {
-				return 1000;
+			if (name.equals("boardWood")) {
+				return 150;
 			}
 
-			// if(block.getMaterial() == Material.rock){
-			// return 300;
-			// }
+			if (item instanceof ItemBlock
+					&& Block.getBlockFromItem(item) != Blocks.air) {
+				Block block = Block.getBlockFromItem(item);
+
+				id = OreDictionary.getOreID(fuel);
+				name = OreDictionary.getOreName(id);
+				if (name.equals("treeWood") || name.equals("logWood")
+						|| name.equals("plankWood")
+						|| name.equals("listAlldebarkedlogs")) {
+					return 600;
+				}
+
+			}
+
+			return GameRegistry.getFuelValue(fuel);
 		}
 
-		// if(item instanceof ItemTool && ((ItemTool)
-		// item).getToolMaterialName().equals("EMERALD")) return 300;
-
-		return GameRegistry.getFuelValue(fuel);
-	}
-		
-		
-//		Block block = Block.getBlockFromItem(fuel.getItem());
-//		Item item = fuel.getItem();
-//
-//		if (block != null)
-//		{
-//			if (block.getMaterial() == Material.wood)
-//			{
-//				return 600;
-//			}
-//			if (block == Blocks.wooden_slab)
-//			{
-//				return 300;
-//			}
-//			if (block == Blocks.sapling)
-//			{
-//				return 200;
-//			}
-//		}
-//
-//		if (item != null)
-//		{
-//
-//
-//			if (item instanceof ItemTool)
-//			{
-//				if (((ItemTool)item).getToolMaterialName().equals("WOOD") ||
-//						((ItemTool)item).getToolMaterialName().equals("noobwood"))
-//				{
-//					return 400;
-//				}
-//			}
-//			if (item instanceof ItemSword)
-//			{
-//				if (((ItemSword)item).getToolMaterialName().equals("WOOD") ||
-//						((ItemSword)item).getToolMaterialName().equals("noobwood"))
-//				{
-//					return 400;
-//				}
-//			}
-//			if (item instanceof ItemHoe)
-//			{
-//				if (((ItemHoe)item).getToolMaterialName().equals("WOOD") ||
-//						((ItemHoe)item).getToolMaterialName().equals("noobwood"))
-//				{
-//					return 400;
-//				}
-//			}
-//			if (item == Items.stick)
-//			{
-//				return 200;
-//			}
-//		}
-//
-//		return 0;
 	}
 
-	public ItemStack stackFuel()
-	{
+	public ItemStack stackFuel() {
 		return stacks[SLOT_FUEL];
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int slot)
-	{
+	public ItemStack getStackInSlot(int slot) {
 		return stacks[slot];
 	}
 
 	@Override
-	public ItemStack decrStackSize(int slot, int amount)
-	{
-		if (stacks[slot] != null)
-		{
+	public ItemStack decrStackSize(int slot, int amount) {
+		if (stacks[slot] != null) {
 			ItemStack stack;
-			if (stacks[slot].stackSize <= amount)
-			{
+			if (stacks[slot].stackSize <= amount) {
 				stack = stacks[slot];
 				stacks[slot] = null;
 				return stack;
-			}
-			else
-			{
+			} else {
 				stack = stacks[slot].splitStack(amount);
 
-				if (stacks[slot].stackSize == 0)
-				{
+				if (stacks[slot].stackSize == 0) {
 					stacks[slot] = null;
 				}
 
 				return stack;
 			}
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot)
-	{
-		if (stacks[slot] == null)
-		{
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		if (stacks[slot] == null) {
 			return null;
 		}
 
@@ -505,128 +423,107 @@ public class TileEntityCampfire extends TileEntity implements IInventory
 	}
 
 	@Override
-	public void setInventorySlotContents(int slot, ItemStack stack)
-	{
+	public void setInventorySlotContents(int slot, ItemStack stack) {
 		stacks[slot] = stack;
 	}
 
 	@Override
-	public String getInventoryName()
-	{
+	public String getInventoryName() {
 		return hasCustomInventoryName() ? campfireName : "container.campfire";
 	}
 
 	@Override
-	public boolean hasCustomInventoryName()
-	{
+	public boolean hasCustomInventoryName() {
 		return campfireName != null && campfireName.length() > 0;
 	}
 
 	@Override
-	public int getInventoryStackLimit()
-	{
+	public int getInventoryStackLimit() {
 		return 64;
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player)
-	{
-		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this)
-		{
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this) {
 			return false;
-		}
-		else
-		{
-			return player.getDistanceSq(xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d) <= 64.0d;
+		} else {
+			return player.getDistanceSq(xCoord + 0.5d, yCoord + 0.5d,
+					zCoord + 0.5d) <= 64.0d;
 		}
 	}
 
 	@Override
-	public void openInventory()
-	{ }
-
-	@Override
-	public void closeInventory()
-	{ }
-
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack)
-	{
-		return slot == SLOT_INPUT || slot == SLOT_PAN && isPan(stack) ||
-			slot == SLOT_FUEL && isItemFuel(stack);
+	public void openInventory() {
 	}
 
-	private static boolean isPan(ItemStack stack)
-	{
-		if (stack == null)
-		{
+	@Override
+	public void closeInventory() {
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+		return slot == SLOT_INPUT || slot == SLOT_PAN && isPan(stack)
+				|| slot == SLOT_FUEL && isItemFuel(stack);
+	}
+
+	private static boolean isPan(ItemStack stack) {
+		if (stack == null) {
 			return false;
 		}
 		return false;
 
-//		return stack.getItem() instanceof ItemPan;
+		// return stack.getItem() instanceof ItemPan;
 	}
 
-	public static boolean isItemFuel(ItemStack itemstack1)
-	{
+	public static boolean isItemFuel(ItemStack itemstack1) {
 		return getBurnTimeForFuel(itemstack1) > 0;
 	}
 
-	public void lightFuel()
-	{
-		if (campfireState == STATE_BURNING)
-		{
+	public void lightFuel() {
+		if (campfireState == STATE_BURNING) {
 			return;
 		}
 
 		int maxBurn = getBurnTimeForFuel(stackFuel());
-		if (maxBurn > 0)
-		{
-			if (canCook())
-			{
+		if (maxBurn > 0) {
+			if (isKindling()) {
 				burnTime = maxBurn;
 				decayTime = maxDecayTime;
 				campfireState = STATE_BURNING;
 
 				// consume fuel
 				currentItemBurnTime = burnTime;
-				if (stackFuel() != null)
-				{
+				if (stackFuel() != null) {
 					stackFuel().stackSize--;
 
-					if (stackFuel().stackSize == 0)
-					{
-						stacks[SLOT_FUEL] = stackFuel().getItem().getContainerItem(stackFuel());
+					if (stackFuel().stackSize == 0) {
+						stacks[SLOT_FUEL] = stackFuel().getItem()
+								.getContainerItem(stackFuel());
 					}
 				}
 			}
 		}
 	}
 
-	public boolean isBurning()
-	{
+	public boolean isBurning() {
 		return burnTime > 0;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getCookProgressScaled(int i)
-	{
+	public int getCookProgressScaled(int i) {
 		return cookTime * i / maxCookTime;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getBurnTimeRemainingScaled(int i)
-	{
-		if (currentItemBurnTime <= 0)
-		{
+	public int getBurnTimeRemainingScaled(int i) {
+		if (currentItemBurnTime <= 0) {
 			return 0;
 		}
 
 		return burnTime * i / currentItemBurnTime;
 	}
 
-	public int getDecayTimeRemainingScaled(int i)
-	{
+	public int getDecayTimeRemainingScaled(int i) {
 		return decayTime * i / maxDecayTime;
 	}
 }
